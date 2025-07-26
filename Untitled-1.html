@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>The End</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #endText {
+      color: white;
+      font-size: 5rem;
+      font-family: 'Georgia', serif;
+      text-shadow: 0 0 15px red;
+      animation: fadeIn 3s ease-in-out;
+      display: none;
+    }
+
+    #startButton {
+      padding: 20px 40px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background: darkred;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    #startButton:hover {
+      background: crimson;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <button id="startButton">Start</button>
+  <div id="endText">The end</div>
+
+  <audio id="endMusic">
+    <source src="end.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+    const endText = document.getElementById("endText");
+    const endMusic = document.getElementById("endMusic");
+
+    startButton.addEventListener("click", () => {
+      endText.style.display = "block";
+      startButton.style.display = "none";
+      endMusic.volume = 0.6;
+      endMusic.play().catch(err => {
+        console.error("Playback error:", err);
+      });
+    });
+  </script>
+</body>
+</html>
