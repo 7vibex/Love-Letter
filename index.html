@@ -219,33 +219,33 @@
     heartButton.appendChild(after);
     container.appendChild(heartButton);
 
-    heartButton.onclick = () => {
-      video.style.display = "block";
-      video.play();
-      if (video.requestFullscreen) video.requestFullscreen();
-
-      // Listen for fullscreen exit
-      function onFullscreenChange() {
-        if (
-          !document.fullscreenElement && 
-          !document.webkitFullscreenElement && 
-          !document.mozFullScreenElement && 
-          !document.msFullscreenElement
-        ) {
-          // Fullscreen exited
-          showSorryMessage();
-          document.removeEventListener('fullscreenchange', onFullscreenChange);
-          document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
-          document.removeEventListener('mozfullscreenchange', onFullscreenChange);
-          document.removeEventListener('MSFullscreenChange', onFullscreenChange);
-        }
+   
       }
 
-      document.addEventListener('fullscreenchange', onFullscreenChange);
-      document.addEventListener('webkitfullscreenchange', onFullscreenChange);
-      document.addEventListener('mozfullscreenchange', onFullscreenChange);
-      document.addEventListener('MSFullscreenChange', onFullscreenChange);
-    };
+    heartButton.onclick = () => {
+  video.style.display = "block";
+  video.play();
+
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  if (!isMobile && video.requestFullscreen) {
+    // Desktop: request fullscreen and listen for exit
+    video.requestFullscreen();
+
+    function onFullscreenChange() {
+      if (!document.fullscreenElement) {
+        showSorryMessage();
+        document.removeEventListener('fullscreenchange', onFullscreenChange);
+      }
+    }
+
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+
+  } else {
+    // Mobile: just show message after video ends, no fullscreen
+    video.onended = showSorryMessage;
+  }
+};
 
     function showSorryMessage() {
       const sorryMsg = document.createElement('div');
