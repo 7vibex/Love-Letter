@@ -1,66 +1,256 @@
-function showFinalHeart() {
-  const finalMessage = document.createElement('div');
-  finalMessage.innerText = "One last thing... click the heart ❤️";
-  finalMessage.style.marginTop = "40px";
-  finalMessage.style.fontSize = "1.6rem";
-  finalMessage.style.color = "#ff99cc";
-  finalMessage.style.textShadow = "0 0 10px #ff66aa";
-  container.appendChild(finalMessage);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>For You</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: radial-gradient(ellipse at bottom, #1b0032 0%, #000000 100%);
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+    }
 
-  // Create heart button
-  const heartButton = document.createElement('div');
-  heartButton.style.width = "60px";
-  heartButton.style.height = "60px";
-  heartButton.style.background = "#ff4d6d";
-  heartButton.style.position = "relative";
-  heartButton.style.transform = "rotate(45deg)";
-  heartButton.style.marginTop = "20px";
-  heartButton.style.cursor = "pointer";
-  heartButton.style.animation = "pulse 1s infinite alternate";
-  heartButton.style.boxShadow = "0 0 20px #ff4d6d";
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzYxODQyMHBlZm12eGNkcng3cGRkemczd240emhjamNnMHZ4YnVsbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QAF2NDkBi5OdW/giphy.gif') repeat;
+      animation: starsMove 200s linear infinite;
+      z-index: 0;
+    }
 
-  const before = document.createElement('div');
-  before.style.width = "60px";
-  before.style.height = "60px";
-  before.style.borderRadius = "50%";
-  before.style.background = "#ff4d6d";
-  before.style.position = "absolute";
-  before.style.top = "-30px";
-  before.style.left = "0";
+    @keyframes starsMove {
+      from { background-position: 0 0; }
+      to { background-position: 10000px 10000px; }
+    }
 
-  const after = document.createElement('div');
-  after.style.width = "60px";
-  after.style.height = "60px";
-  after.style.borderRadius = "50%";
-  after.style.background = "#ff4d6d";
-  after.style.position = "absolute";
-  after.style.left = "-30px";
-  after.style.top = "0";
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
+      box-sizing: border-box;
+      color: white;
+    }
 
-  heartButton.appendChild(before);
-  heartButton.appendChild(after);
-  container.appendChild(heartButton);
+    #messageBox {
+      font-size: 2.2rem;
+      max-width: 800px;
+      line-height: 1.6;
+      text-shadow: 0 0 15px #ff5e99;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
 
-  // Create hidden video element
-  const video = document.createElement('video');
-  video.src = "rickroll.mp4";
-  video.id = "rickVideo";
-  video.style.display = "none";
-  video.controls = true;
-  video.style.position = "fixed";
-  video.style.top = "0";
-  video.style.left = "0";
-  video.style.width = "100vw";
-  video.style.height = "100vh";
-  video.style.zIndex = "9999";
-  video.style.background = "black";
-  video.setAttribute("playsinline", "");
-  document.body.appendChild(video);
+    #messageBox.show {
+      opacity: 1;
+      transform: scale(1);
+    }
 
-  // On click → play video fullscreen
-  heartButton.onclick = () => {
-    video.style.display = "block";
-    video.requestFullscreen?.(); // works in most browsers
-    video.play();
+    #nextBtn {
+      margin-top: 30px;
+      padding: 15px 35px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background: #ff3366;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    #nextBtn:hover {
+      background: #ff6699;
+      transform: scale(1.05);
+    }
+
+    .signature {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      color: #ffb6c1;
+      font-style: italic;
+      text-shadow: 0 0 10px #ff69b4;
+    }
+
+    .heart {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
+      transform: rotate(45deg);
+      animation: fall 10s linear infinite;
+      opacity: 0.5;
+      z-index: 1;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -7.5px; left: 0; }
+    .heart::after { top: 0; left: -7.5px; }
+
+    @keyframes fall {
+      0% { transform: translateY(-100vh) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(120vh) rotate(45deg); opacity: 0; }
+    }
+
+    @keyframes pulse {
+      0% { transform: rotate(45deg) scale(1); }
+      100% { transform: rotate(45deg) scale(1.15); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div class="container">
+  <div id="messageBox" class="show"></div>
+  <button id="nextBtn">Next</button>
+</div>
+
+<audio autoplay loop>
+  <source src="end.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
+
+<video id="rickVideo" src="rickroll.mp4" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; z-index:9999;" controls></video>
+
+<script>
+  const lines = [
+    "Well... I don’t know if you’ll ever see this, but I just wanted to say that I miss you.",
+    "I do love you — I really do.",
+    "I don't know why I keep trying when everything feels so one-sided...",
+    "Maybe it's because you meant more to me than I could ever say.",
+    "You gave up on us so easily...",
+    "And yet here I am — still holding on.",
+    "Maybe that makes me foolish...",
+    "But I just needed you to know.",
+    "Even if you'll never read this...",
+    "Thank you for everything.",
+    "I love you too, my sweetheart.",
+    "— You are black"
+  ];
+
+  const messageBox = document.getElementById("messageBox");
+  const nextBtn = document.getElementById("nextBtn");
+  const container = document.querySelector(".container");
+  const video = document.getElementById("rickVideo");
+  let index = 0;
+
+  window.onload = () => {
+    messageBox.innerHTML = lines[0];
+    messageBox.classList.add("show");
+    index = 1;
   };
-}
+
+  nextBtn.addEventListener("click", () => {
+    messageBox.classList.remove("show");
+    setTimeout(() => {
+      if (index < lines.length) {
+        messageBox.innerHTML = lines[index].startsWith("—") 
+          ? `<div class="signature">${lines[index]}</div>` 
+          : lines[index];
+        messageBox.classList.add("show");
+        index++;
+        if (index === lines.length) {
+          nextBtn.style.display = "none";
+          setTimeout(showFinalHeart, 1000);
+        }
+      }
+    }, 200);
+  });
+
+  function showFinalHeart() {
+    const finalMessage = document.createElement('div');
+    finalMessage.innerText = "One last thing... click the heart ❤️";
+    finalMessage.style.marginTop = "40px";
+    finalMessage.style.fontSize = "1.6rem";
+    finalMessage.style.color = "#ff99cc";
+    finalMessage.style.textShadow = "0 0 10px #ff66aa";
+    container.appendChild(finalMessage);
+
+    const heartButton = document.createElement('div');
+    heartButton.style.width = "60px";
+    heartButton.style.height = "60px";
+    heartButton.style.background = "#ff4d6d";
+    heartButton.style.position = "relative";
+    heartButton.style.transform = "rotate(45deg)";
+    heartButton.style.marginTop = "20px";
+    heartButton.style.cursor = "pointer";
+    heartButton.style.animation = "pulse 1s infinite alternate";
+    heartButton.style.boxShadow = "0 0 20px #ff4d6d";
+
+    const before = document.createElement('div');
+    before.style.width = "60px";
+    before.style.height = "60px";
+    before.style.borderRadius = "50%";
+    before.style.background = "#ff4d6d";
+    before.style.position = "absolute";
+    before.style.top = "-30px";
+    before.style.left = "0";
+
+    const after = document.createElement('div');
+    after.style.width = "60px";
+    after.style.height = "60px";
+    after.style.borderRadius = "50%";
+    after.style.background = "#ff4d6d";
+    after.style.position = "absolute";
+    after.style.left = "-30px";
+    after.style.top = "0";
+
+    heartButton.appendChild(before);
+    heartButton.appendChild(after);
+    container.appendChild(heartButton);
+
+    heartButton.onclick = () => {
+      video.style.display = "block";
+      video.play();
+      if (video.requestFullscreen) video.requestFullscreen();
+
+      video.onended = () => {
+        const sorryMsg = document.createElement('div');
+        sorryMsg.innerText = "Sorry, you know me... I had to do it :))";
+        sorryMsg.style.position = "fixed";
+        sorryMsg.style.top = "50%";
+        sorryMsg.style.left = "50%";
+        sorryMsg.style.transform = "translate(-50%, -50%)";
+        sorryMsg.style.fontSize = "2rem";
+        sorryMsg.style.color = "#ff99cc";
+        sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
+        sorryMsg.style.padding = "20px 40px";
+        sorryMsg.style.borderRadius = "20px";
+        sorryMsg.style.textShadow = "0 0 10px #ff66aa";
+        sorryMsg.style.zIndex = "10000";
+        document.body.appendChild(sorryMsg);
+      };
+    };
+  }
+
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (6 + Math.random() * 6) + 's';
+    document.body.appendChild(heart);
+  }
+</script>
+
+</body>
+</html>
