@@ -138,14 +138,14 @@
     "I do love you — I really do.",
     "I don't know why I keep trying when everything feels so one-sided...",
     "Maybe it's because you meant more to me than I could ever say.",
-    "You gave up on us so easily...",
-    "And yet here I am — still holding on.",
+    "You gave up on us after the break up so easily...",
+    "And yet here I am  — trying to fix everything again.",
     "Maybe that makes me foolish...",
     "But I just needed you to know.",
     "Even if you'll never read this...",
     "Thank you for everything.",
     "I love you too, my sweetheart.",
-    "— You are black"
+    "— You are black:)"
   ];
 
   const messageBox = document.getElementById("messageBox");
@@ -171,7 +171,7 @@
         index++;
         if (index === lines.length) {
           nextBtn.style.display = "none";
-          setTimeout(showFinalHeart, 1000);
+          setTimeout(showFinalHeart, 2500);
         }
       }
     }, 200);
@@ -224,23 +224,45 @@
       video.play();
       if (video.requestFullscreen) video.requestFullscreen();
 
-      video.onended = () => {
-        const sorryMsg = document.createElement('div');
-        sorryMsg.innerText = "Sorry, you know me... I had to do it :))";
-        sorryMsg.style.position = "fixed";
-        sorryMsg.style.top = "50%";
-        sorryMsg.style.left = "50%";
-        sorryMsg.style.transform = "translate(-50%, -50%)";
-        sorryMsg.style.fontSize = "2rem";
-        sorryMsg.style.color = "#ff99cc";
-        sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
-        sorryMsg.style.padding = "20px 40px";
-        sorryMsg.style.borderRadius = "20px";
-        sorryMsg.style.textShadow = "0 0 10px #ff66aa";
-        sorryMsg.style.zIndex = "10000";
-        document.body.appendChild(sorryMsg);
-      };
+      // Listen for fullscreen exit
+      function onFullscreenChange() {
+        if (
+          !document.fullscreenElement && 
+          !document.webkitFullscreenElement && 
+          !document.mozFullScreenElement && 
+          !document.msFullscreenElement
+        ) {
+          // Fullscreen exited
+          showSorryMessage();
+          document.removeEventListener('fullscreenchange', onFullscreenChange);
+          document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+          document.removeEventListener('mozfullscreenchange', onFullscreenChange);
+          document.removeEventListener('MSFullscreenChange', onFullscreenChange);
+        }
+      }
+
+      document.addEventListener('fullscreenchange', onFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+      document.addEventListener('mozfullscreenchange', onFullscreenChange);
+      document.addEventListener('MSFullscreenChange', onFullscreenChange);
     };
+
+    function showSorryMessage() {
+      const sorryMsg = document.createElement('div');
+      sorryMsg.innerText = "Sorry, you know me... I had to do it :))";
+      sorryMsg.style.position = "fixed";
+      sorryMsg.style.top = "50%";
+      sorryMsg.style.left = "50%";
+      sorryMsg.style.transform = "translate(-50%, -50%)";
+      sorryMsg.style.fontSize = "2rem";
+      sorryMsg.style.color = "#ff99cc";
+      sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
+      sorryMsg.style.padding = "20px 40px";
+      sorryMsg.style.borderRadius = "20px";
+      sorryMsg.style.textShadow = "0 0 10px #ff66aa";
+      sorryMsg.style.zIndex = "10000";
+      document.body.appendChild(sorryMsg);
+    }
   }
 
   for (let i = 0; i < 30; i++) {
