@@ -2,110 +2,188 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>The End</title>
+  <title>For You</title>
   <style>
     html, body {
-      height: 100%;
       margin: 0;
-      background: black;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      padding: 0;
+      height: 100%;
+      background: radial-gradient(ellipse at bottom, #1b0032 0%, #000000 100%);
       font-family: 'Georgia', serif;
+      overflow: hidden;
     }
 
-    #endText {
-      color: white;
-      font-size: 2.5rem;
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGZoaHozMGl1dzJqYnpteXo5cTZoeXRkam05djJtNHV5YTlmcWVucSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NbhiwA0C8THIv8KvG5/giphy.gif') repeat;
+      animation: starsMove 200s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes starsMove {
+      from { background-position: 0 0; }
+      to { background-position: 10000px 10000px; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      max-width: 80%;
-      text-shadow: 0 0 15px red;
-      animation: fadeIn 3s ease-in-out forwards;
-      opacity: 0;
+      padding: 40px;
+      box-sizing: border-box;
+      color: white;
+    }
+
+    #messageBox {
+      font-size: 2.2rem;
+      max-width: 800px;
       line-height: 1.6;
+      text-shadow: 0 0 15px #ff5e99;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #messageBox.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #nextBtn {
+      margin-top: 30px;
+      padding: 15px 35px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background: #ff3366;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    #nextBtn:hover {
+      background: #ff6699;
+      transform: scale(1.05);
     }
 
     .signature {
       margin-top: 30px;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       color: #ffb6c1;
       font-style: italic;
+      text-shadow: 0 0 10px #ff69b4;
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-
-    /* Falling hearts */
     .heart {
-      position: fixed;
-      width: 20px;
-      height: 20px;
-      background: red;
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
       transform: rotate(45deg);
       animation: fall 10s linear infinite;
+      opacity: 0.5;
+      z-index: 1;
     }
 
     .heart::before,
     .heart::after {
       content: '';
       position: absolute;
-      width: 20px;
-      height: 20px;
-      background: red;
+      width: 15px;
+      height: 15px;
+      background: #ff4d6d;
       border-radius: 50%;
     }
 
-    .heart::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: -10px;
-      top: 0;
-    }
+    .heart::before { top: -7.5px; left: 0; }
+    .heart::after { top: 0; left: -7.5px; }
 
     @keyframes fall {
-      0% {
-        top: -10%;
-        opacity: 1;
-      }
-      100% {
-        top: 110%;
-        opacity: 0;
-      }
+      0% { transform: translateY(-100vh) rotate(45deg); opacity: 1; }
+      100% { transform: translateY(120vh) rotate(45deg); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <div id="endText">
-    if u see this u are black
-    <div class="signature"> </div>
-  </div>
 
-  <audio id="endMusic" autoplay>
-    <source src="end.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+<div class="stars"></div>
 
-  <script>
-    const heartCount = 20;
-    for (let i = 0; i < heartCount; i++) {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
-      document.body.appendChild(heart);
+<div class="container">
+  <div id="messageBox" class="show"></div>
+  <button id="nextBtn">Next</button>
+</div>
+
+<audio autoplay loop>
+  <source src="end.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<script>
+  const lines = [
+    "Well... I don’t know if you’ll ever see this, but I just wanted to say that I miss you.",
+    "I do love you — I really do.",
+    "I don't know why I keep trying when everything feels so one-sided...",
+    "Maybe it's because you meant more to me than I could ever say.",
+    "You gave up on us so easily after the break up ...",
+    "And yet here I am — still trying to fix all the things.",
+    "Maybe that makes me foolish...",
+    "But I just needed you to know.",
+    "Even if you'll never read this...",
+    "Thank you for everything.",
+    "I love you too, my sweetheart.",
+    "— You are black"
+  ];
+
+  const messageBox = document.getElementById("messageBox");
+  const nextBtn = document.getElementById("nextBtn");
+  let index = 0;
+
+  // Function to show current line
+  function showLine() {
+    messageBox.classList.remove("show");
+    setTimeout(() => {
+      if (lines[index].startsWith("—")) {
+        messageBox.innerHTML = `<div class="signature">${lines[index]}</div>`;
+      } else {
+        messageBox.innerHTML = lines[index];
+      }
+      messageBox.classList.add("show");
+      index++;
+      if (index >= lines.length) {
+        nextBtn.style.display = "none";
+      }
+    }, 200);
+  }
+
+  // Display first line immediately after load
+  window.onload = () => {
+    if (lines[0].startsWith("—")) {
+      messageBox.innerHTML = `<div class="signature">${lines[0]}</div>`;
+    } else {
+      messageBox.innerHTML = lines[0];
     }
+    messageBox.classList.add("show");
+    index = 1;
+  };
 
-    const audio = document.getElementById("endMusic");
-    audio.volume = 0.5;
-    audio.play().catch(err => console.error("Autoplay error:", err));
-  </script>
+  nextBtn.addEventListener("click", showLine);
+
+  // Floating hearts
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (6 + Math.random() * 6) + 's';
+    document.body.appendChild(heart);
+  }
+</script>
+
 </body>
 </html>
