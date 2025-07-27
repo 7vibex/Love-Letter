@@ -114,6 +114,34 @@
       0% { transform: rotate(45deg) scale(1); }
       100% { transform: rotate(45deg) scale(1.15); }
     }
+
+    /* Styling the new "this is me" container */
+    #thisIsMeContainer {
+      display: flex;
+      align-items: center;
+      margin-top: 40px;
+      gap: 20px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      color: #ff99cc;
+      text-shadow: 0 0 10px #ff66aa;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    #thisIsMeContainer.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #thisIsMeContainer img {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff4d6d;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
@@ -145,7 +173,7 @@
     "Even if you'll never read this...",
     "Thank you for everything.",
     "I love you too, my sweetheart.",
-    "— U are a nigger"
+    "— Marius"
   ];
 
   const messageBox = document.getElementById("messageBox");
@@ -171,15 +199,33 @@
         index++;
         if (index === lines.length) {
           nextBtn.style.display = "none";
-          setTimeout(showFinalHeart, 700);
+          setTimeout(showThisIsMe, 800);
         }
       }
     }, 200);
   });
 
+  function showThisIsMe() {
+    // Create container for "This is me" and the GIF
+    const thisIsMeContainer = document.createElement('div');
+    thisIsMeContainer.id = "thisIsMeContainer";
+    thisIsMeContainer.innerHTML = `
+      <span>This is me →</span>
+      <img src="yourgif.gif" alt="This is me GIF" />
+    `;
+    container.appendChild(thisIsMeContainer);
+    // Animate in
+    setTimeout(() => {
+      thisIsMeContainer.classList.add('show');
+    }, 100);
+
+    // After a few seconds, show the heart button
+    setTimeout(showFinalHeart, 4000);
+  }
+
   function showFinalHeart() {
     const finalMessage = document.createElement('div');
-    finalMessage.innerText = "One last thing... click the heart ❤️(watch it till the end)";
+    finalMessage.innerText = "One last thing... click the heart ❤️";
     finalMessage.style.marginTop = "40px";
     finalMessage.style.fontSize = "1.6rem";
     finalMessage.style.color = "#ff99cc";
@@ -219,7 +265,6 @@
     heartButton.appendChild(after);
     container.appendChild(heartButton);
 
-    // Correctly assign click handler here, inside the function scope:
     heartButton.onclick = () => {
       video.style.display = "block";
       video.play();
