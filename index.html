@@ -145,7 +145,7 @@
     "Even if you'll never read this...",
     "Thank you for everything.",
     "I love you too, my sweetheart.",
-    "— You are black:)"
+    "— U are a nigger"
   ];
 
   const messageBox = document.getElementById("messageBox");
@@ -219,52 +219,47 @@
     heartButton.appendChild(after);
     container.appendChild(heartButton);
 
-   
-      }
-
+    // Correctly assign click handler here, inside the function scope:
     heartButton.onclick = () => {
-  video.style.display = "block";
-  video.play();
+      video.style.display = "block";
+      video.play();
 
-  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-  if (!isMobile && video.requestFullscreen) {
-    // Desktop: request fullscreen and listen for exit
-    video.requestFullscreen();
+      if (!isMobile && video.requestFullscreen) {
+        video.requestFullscreen();
 
-    function onFullscreenChange() {
-      if (!document.fullscreenElement) {
-        showSorryMessage();
-        document.removeEventListener('fullscreenchange', onFullscreenChange);
+        function onFullscreenChange() {
+          if (!document.fullscreenElement) {
+            showSorryMessage();
+            document.removeEventListener('fullscreenchange', onFullscreenChange);
+          }
+        }
+        document.addEventListener('fullscreenchange', onFullscreenChange);
+      } else {
+        video.onended = showSorryMessage;
       }
-    }
-
-    document.addEventListener('fullscreenchange', onFullscreenChange);
-
-  } else {
-    // Mobile: just show message after video ends, no fullscreen
-    video.onended = showSorryMessage;
-  }
-};
-
-    function showSorryMessage() {
-      const sorryMsg = document.createElement('div');
-      sorryMsg.innerText = "Sorry, you know me... I had to do it :))";
-      sorryMsg.style.position = "fixed";
-      sorryMsg.style.top = "50%";
-      sorryMsg.style.left = "50%";
-      sorryMsg.style.transform = "translate(-50%, -50%)";
-      sorryMsg.style.fontSize = "2rem";
-      sorryMsg.style.color = "#ff99cc";
-      sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
-      sorryMsg.style.padding = "20px 40px";
-      sorryMsg.style.borderRadius = "20px";
-      sorryMsg.style.textShadow = "0 0 10px #ff66aa";
-      sorryMsg.style.zIndex = "10000";
-      document.body.appendChild(sorryMsg);
-    }
+    };
   }
 
+  function showSorryMessage() {
+    const sorryMsg = document.createElement('div');
+    sorryMsg.innerText = "Sorry, you know me... I had to do it :))";
+    sorryMsg.style.position = "fixed";
+    sorryMsg.style.top = "50%";
+    sorryMsg.style.left = "50%";
+    sorryMsg.style.transform = "translate(-50%, -50%)";
+    sorryMsg.style.fontSize = "2rem";
+    sorryMsg.style.color = "#ff99cc";
+    sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
+    sorryMsg.style.padding = "20px 40px";
+    sorryMsg.style.borderRadius = "20px";
+    sorryMsg.style.textShadow = "0 0 10px #ff66aa";
+    sorryMsg.style.zIndex = "10000";
+    document.body.appendChild(sorryMsg);
+  }
+
+  // Floating hearts animation
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement('div');
     heart.className = 'heart';
