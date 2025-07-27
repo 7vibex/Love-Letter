@@ -8,64 +8,110 @@
       height: 100%;
       margin: 0;
       background: black;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      font-family: 'Georgia', serif;
     }
 
     #endText {
       color: white;
-      font-size: 5rem;
-      font-family: 'Georgia', serif;
+      font-size: 2.5rem;
+      text-align: center;
+      max-width: 80%;
       text-shadow: 0 0 15px red;
-      animation: fadeIn 3s ease-in-out;
-      display: none;
+      animation: fadeIn 3s ease-in-out forwards;
+      opacity: 0;
+      line-height: 1.6;
     }
 
-    #startButton {
-      padding: 20px 40px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      background: darkred;
-      color: white;
-      transition: background 0.3s;
-    }
-
-    #startButton:hover {
-      background: crimson;
+    .signature {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #ffb6c1;
+      font-style: italic;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Falling hearts */
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: fall 10s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes fall {
+      0% {
+        top: -10%;
+        opacity: 1;
+      }
+      100% {
+        top: 110%;
+        opacity: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <button id="startButton">Start</button>
-  <div id="endText">The end</div>
+  <div id="endText">
+    Well... I don’t know if you’ll ever see this, but I just wanted to say that I miss you.  
+    I do love you — I really do. I don't know why I keep trying when everything feels so one-sided,  
+    but maybe it's because you meant more to me than I could ever say.  
+    You gave up on us so easily, and yet here I am — still holding on.  
+    Maybe that makes me foolish, but I just needed you to know.  
+    Even if you'll never read this... thank you for everything.  
+    I love you too, my sweetheart.
+    <div class="signature">— Marius</div>
+  </div>
 
-  <audio id="endMusic">
+  <audio id="endMusic" autoplay>
     <source src="end.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script>
-    const startButton = document.getElementById("startButton");
-    const endText = document.getElementById("endText");
-    const endMusic = document.getElementById("endMusic");
+    const heartCount = 20;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(heart);
+    }
 
-    startButton.addEventListener("click", () => {
-      endText.style.display = "block";
-      startButton.style.display = "none";
-      endMusic.volume = 0.6;
-      endMusic.play().catch(err => {
-        console.error("Playback error:", err);
-      });
-    });
+    const audio = document.getElementById("endMusic");
+    audio.volume = 0.5;
+    audio.play().catch(err => console.error("Autoplay error:", err));
   </script>
 </body>
 </html>
