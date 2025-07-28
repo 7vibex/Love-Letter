@@ -115,7 +115,6 @@
       100% { transform: rotate(45deg) scale(1.15); }
     }
 
-    /* Styling the new "this is me" container */
     #thisIsMeContainer {
       display: flex;
       align-items: center;
@@ -161,20 +160,20 @@
 <video id="rickVideo" src="rickroll.mp4" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; z-index:9999;" controls></video>
 
 <script>
- const lines = [
-  "I don’t even know if you’ll ever read this… but I need to get this off my chest.",
-  "I was the one who ended things — and honestly, I wasn’t thinking straight when I did it.",
-  "I acted on emotion, not reason… and I regret it more than I can explain.",
-  "You didn’t deserve that. You didn’t deserve the way I pushed you away.",
-  "I keep replaying everything in my mind — the good, the bad, and everything in between.",
-  "I still love you, Karina. I never stopped.",
-  "And I miss you — more than I ever thought I could miss someone.",
-  "Maybe I messed up beyond repair… maybe you’ve already moved on.",
-  "But I needed you to know that I’m sorry — truly.",
-  "Thank you for the love you gave me.",
-  "I love you, Karina. I always will."
-];
-
+  const lines = [
+    "I don’t even know if you’ll ever read this… but I need to get this off my chest.",
+    "I was the one who ended things — and honestly, I wasn’t thinking straight when I did it.",
+    "I acted on emotion, not reason… and I regret it more than I can explain.",
+    "You didn’t deserve that. You didn’t deserve the way I pushed you away.",
+    "I keep replaying everything in my mind — the good, the bad, and everything in between.",
+    "I still love you, Karina. I never stopped.",
+    "And I miss you — more than I ever thought I could miss someone.",
+    "Maybe I messed up beyond repair… maybe you’ve already moved on.",
+    "But I needed you to know that I’m sorry — truly.",
+    "Thank you for the love you gave me.",
+    "I love you, Karina. I always will.",
+    
+  ];
 
   const messageBox = document.getElementById("messageBox");
   const nextBtn = document.getElementById("nextBtn");
@@ -206,7 +205,6 @@
   });
 
   function showThisIsMe() {
-    // Create container for "This is me" and the GIF
     const thisIsMeContainer = document.createElement('div');
     thisIsMeContainer.id = "thisIsMeContainer";
     thisIsMeContainer.innerHTML = `
@@ -214,12 +212,9 @@
       <img src="https://media.tenor.com/0DKYMuOhOicAAAAi/cat-cat-sad.gif" alt="This is me GIF" />
     `;
     container.appendChild(thisIsMeContainer);
-    // Animate in
     setTimeout(() => {
       thisIsMeContainer.classList.add('show');
     }, 100);
-
-    // After a few seconds, show the heart button
     setTimeout(showFinalHeart, 1000);
   }
 
@@ -273,7 +268,6 @@
 
       if (!isMobile && video.requestFullscreen) {
         video.requestFullscreen();
-
         function onFullscreenChange() {
           if (!document.fullscreenElement) {
             showSorryMessage();
@@ -289,7 +283,12 @@
 
   function showSorryMessage() {
     const sorryMsg = document.createElement('div');
-    sorryMsg.innerText = "Sorry, you know me... I had to do it :))";
+    sorryMsg.innerHTML = `
+      <p style="margin-bottom: 20px;">Sorry, you know me... I had to do it :))</p>
+      <label for="replyMsg" style="font-size: 1.2rem;">(if u want ,u can write me something back) ↓</label><br/>
+      <textarea id="replyMsg" rows="4" cols="30" placeholder="Type here..." style="margin-top: 10px; padding: 10px; border-radius: 10px; border: none; resize: none; font-size: 1rem;"></textarea><br/>
+      <button id="sendBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 10px; background-color: #ff69b4; color: white; cursor: pointer;">Send</button>
+    `;
     sorryMsg.style.position = "fixed";
     sorryMsg.style.top = "50%";
     sorryMsg.style.left = "50%";
@@ -297,14 +296,23 @@
     sorryMsg.style.fontSize = "2rem";
     sorryMsg.style.color = "#ff99cc";
     sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
-    sorryMsg.style.padding = "20px 40px";
+    sorryMsg.style.padding = "30px 40px";
     sorryMsg.style.borderRadius = "20px";
     sorryMsg.style.textShadow = "0 0 10px #ff66aa";
     sorryMsg.style.zIndex = "10000";
     document.body.appendChild(sorryMsg);
+
+    document.getElementById('sendBtn').onclick = () => {
+      const message = document.getElementById('replyMsg').value.trim();
+      if (message) {
+        const mailLink = `mailto:marius.macarenco@gmail.com?subject=Reply to Your Message&body=${encodeURIComponent(message)}`;
+        window.location.href = mailLink;
+      } else {
+        alert("Please type something first ❤️");
+      }
+    };
   }
 
-  // Floating hearts animation
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement('div');
     heart.className = 'heart';
