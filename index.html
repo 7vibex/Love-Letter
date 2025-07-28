@@ -282,36 +282,59 @@
   }
 
   function showSorryMessage() {
-    const sorryMsg = document.createElement('div');
-    sorryMsg.innerHTML = `
-      <p style="margin-bottom: 20px;">Sorry, you know me... I had to do it :))</p>
-      <label for="replyMsg" style="font-size: 1.2rem;">(if u want ,u can write me something back) ↓</label><br/>
-      <textarea id="replyMsg" rows="4" cols="30" placeholder="Type here..." style="margin-top: 10px; padding: 10px; border-radius: 10px; border: none; resize: none; font-size: 1rem;"></textarea><br/>
-      <button id="sendBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 10px; background-color: #ff69b4; color: white; cursor: pointer;">Send</button>
-    `;
-    sorryMsg.style.position = "fixed";
-    sorryMsg.style.top = "50%";
-    sorryMsg.style.left = "50%";
-    sorryMsg.style.transform = "translate(-50%, -50%)";
-    sorryMsg.style.fontSize = "2rem";
-    sorryMsg.style.color = "#ff99cc";
-    sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
-    sorryMsg.style.padding = "30px 40px";
-    sorryMsg.style.borderRadius = "20px";
-    sorryMsg.style.textShadow = "0 0 10px #ff66aa";
-    sorryMsg.style.zIndex = "10000";
-    document.body.appendChild(sorryMsg);
+  const sorryMsg = document.createElement('div');
+  sorryMsg.innerHTML = `
+    <p style="margin-bottom: 20px;">Sorry, you know me... I had to do it :))</p>
+    <label for="replyMsg" style="font-size: 1.2rem;">If u want to u can write me something back:)) ↓</label><br/>
+    <textarea id="replyMsg" rows="4" cols="30" placeholder="Type here..." style="margin-top: 10px; padding: 10px; border-radius: 10px; border: none; resize: none; font-size: 1rem;"></textarea><br/>
+    <button id="sendBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 10px; background-color: #ff69b4; color: white; cursor: pointer;">Send</button>
+    <div id="statusMsg" style="margin-top: 10px; font-size: 1rem;"></div>
+  `;
+  sorryMsg.style.position = "fixed";
+  sorryMsg.style.top = "50%";
+  sorryMsg.style.left = "50%";
+  sorryMsg.style.transform = "translate(-50%, -50%)";
+  sorryMsg.style.fontSize = "2rem";
+  sorryMsg.style.color = "#ff99cc";
+  sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
+  sorryMsg.style.padding = "30px 40px";
+  sorryMsg.style.borderRadius = "20px";
+  sorryMsg.style.textShadow = "0 0 10px #ff66aa";
+  sorryMsg.style.zIndex = "10000";
+  document.body.appendChild(sorryMsg);
 
-    document.getElementById('sendBtn').onclick = () => {
-      const message = document.getElementById('replyMsg').value.trim();
-      if (message) {
-        const mailLink = `mailto:marius.macarenco@gmail.com?subject=Reply to Your Message&body=${encodeURIComponent(message)}`;
-        window.location.href = mailLink;
+  const sendBtn = document.getElementById('sendBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  sendBtn.onclick = () => {
+    const message = document.getElementById('replyMsg').value.trim();
+    if (!message) {
+      alert("Please type something ❤️");
+      return;
+    }
+
+    fetch("https://formspree.io/f/xgvzyzze", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: message })
+    })
+    .then(res => {
+      if (res.ok) {
+        statusMsg.innerText = "✅ Message sent! I’ll see it soon.";
+        statusMsg.style.color = "#00ff99";
+        document.getElementById('replyMsg').value = "";
       } else {
-        alert("Please type something first ❤️");
+        statusMsg.innerText = "❌ Error sending message.";
+        statusMsg.style.color = "#ff4444";
       }
-    };
-  }
+    })
+    .catch(() => {
+      statusMsg.innerText = "❌ Network error.";
+      statusMsg.style.color = "#ff4444";
+    });
+  };
+}
+
 
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement('div');
