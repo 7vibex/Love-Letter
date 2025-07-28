@@ -245,7 +245,7 @@
     questionBox.style.fontSize = "1.6rem";
     questionBox.style.textShadow = "0 0 10px #ff66aa";
     questionBox.innerHTML = `
-      <p>Before that... if you wanna send me a message ❤️</p>
+      <p>Before that... if you want  u can send me a message ❤️</p>
       <button id="yesBtn">Yes, I want to</button>
       <button id="noBtn">No, I don't want to</button>
     `;
@@ -270,56 +270,7 @@
     };
   }
 
-  function showMessageForm() {
-    const formDiv = document.createElement('div');
-    formDiv.id = "messageForm";
-    formDiv.innerHTML = `
-      <label for="replyMsg" style="font-size:1.3rem;">Write me something back :)</label><br/>
-      <textarea id="replyMsg" rows="4" cols="30" placeholder="Type here..."></textarea><br/>
-      <button id="sendBtn">Send</button>
-      <div id="statusMsg"></div>
-    `;
-    container.appendChild(formDiv);
-
-    const sendBtn = document.getElementById('sendBtn');
-    const statusMsg = document.getElementById('statusMsg');
-
-    sendBtn.onclick = () => {
-      const message = document.getElementById('replyMsg').value.trim();
-      if (!message) {
-        alert("Please type something ❤️");
-        return;
-      }
-
-      fetch("https://formspree.io/f/xgvzyzze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: message })
-      })
-      .then(res => {
-        if (res.ok) {
-          statusMsg.style.color = "#00ff99";
-          statusMsg.textContent = "✅ Message sent! I’ll see it soon.";
-          document.getElementById('replyMsg').value = "";
-
-          // After 1.5 seconds, show the video
-          setTimeout(() => {
-            formDiv.remove();
-            video.style.display = "block";
-            video.play();
-          }, 1500);
-        } else {
-          statusMsg.style.color = "#ff4444";
-          statusMsg.textContent = "❌ Error sending message.";
-        }
-      })
-      .catch(() => {
-        statusMsg.style.color = "#ff4444";
-        statusMsg.textContent = "❌ Network error.";
-      });
-    };
-  }
-
+  
   // Floating hearts animation
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement('div');
