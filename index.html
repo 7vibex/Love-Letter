@@ -56,31 +56,82 @@
       transform: scale(1);
     }
 
-    #nextBtn {
-      margin-top: 30px;
-      padding: 15px 35px;
-      font-size: 1.2rem;
+    button {
+      margin-top: 20px;
+      padding: 12px 28px;
+      font-size: 1.1rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 10px;
       background: #ff3366;
       color: white;
       cursor: pointer;
+      box-shadow: 0 0 12px #ff6699;
       transition: background 0.3s, transform 0.2s;
+      user-select: none;
     }
 
-    #nextBtn:hover {
+    button:hover {
       background: #ff6699;
       transform: scale(1.05);
     }
 
-    .signature {
-      margin-top: 30px;
-      font-size: 1.5rem;
-      color: #ffb6c1;
-      font-style: italic;
-      text-shadow: 0 0 10px #ff69b4;
+    #thisIsMeContainer {
+      display: flex;
+      align-items: center;
+      margin-top: 40px;
+      gap: 20px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      color: #ff99cc;
+      text-shadow: 0 0 10px #ff66aa;
+      font-size: 1.8rem;
+      font-weight: bold;
     }
 
+    #thisIsMeContainer.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #thisIsMeContainer img {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ff4d6d;
+      object-fit: cover;
+    }
+
+    /* Message box styles */
+    #messageForm {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #ff99cc;
+      text-shadow: 0 0 10px #ff66aa;
+    }
+
+    #messageForm textarea {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      resize: none;
+      font-size: 1rem;
+      width: 280px;
+      height: 100px;
+      background: #330022;
+      color: white;
+      box-shadow: 0 0 10px #ff4d6d;
+    }
+
+    #statusMsg {
+      margin-top: 15px;
+      font-size: 1rem;
+    }
+
+    /* Heart styles */
     .heart {
       position: absolute;
       width: 15px;
@@ -114,33 +165,6 @@
       0% { transform: rotate(45deg) scale(1); }
       100% { transform: rotate(45deg) scale(1.15); }
     }
-
-    #thisIsMeContainer {
-      display: flex;
-      align-items: center;
-      margin-top: 40px;
-      gap: 20px;
-      opacity: 0;
-      transform: scale(0.95);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      color: #ff99cc;
-      text-shadow: 0 0 10px #ff66aa;
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-
-    #thisIsMeContainer.show {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    #thisIsMeContainer img {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #ff4d6d;
-      object-fit: cover;
-    }
   </style>
 </head>
 <body>
@@ -154,7 +178,6 @@
 
 <audio autoplay loop>
   <source src="end.mp3" type="audio/mpeg" />
-  Your browser does not support the audio element.
 </audio>
 
 <video id="rickVideo" src="rickroll.mp4" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:black; z-index:9999;" controls></video>
@@ -171,8 +194,7 @@
     "Maybe I messed up beyond repair… maybe you’ve already moved on.",
     "But I needed you to know that I’m sorry — truly.",
     "Thank you for the love you gave me.",
-    "I love you, Karina. I always will.",
-    
+    "I love you, Karina. I always will."
   ];
 
   const messageBox = document.getElementById("messageBox");
@@ -191,9 +213,7 @@
     messageBox.classList.remove("show");
     setTimeout(() => {
       if (index < lines.length) {
-        messageBox.innerHTML = lines[index].startsWith("—") 
-          ? `<div class="signature">${lines[index]}</div>` 
-          : lines[index];
+        messageBox.innerHTML = lines[index];
         messageBox.classList.add("show");
         index++;
         if (index === lines.length) {
@@ -219,123 +239,88 @@
   }
 
   function showFinalHeart() {
-    const finalMessage = document.createElement('div');
-    finalMessage.innerText = "One last thing... click the heart ❤️(watch it till the end)";
-    finalMessage.style.marginTop = "40px";
-    finalMessage.style.fontSize = "1.6rem";
-    finalMessage.style.color = "#000000";
-    finalMessage.style.textShadow = "0 0 10px #ff66aa";
-    container.appendChild(finalMessage);
+    const questionBox = document.createElement('div');
+    questionBox.style.marginTop = "30px";
+    questionBox.style.color = "white";
+    questionBox.style.fontSize = "1.6rem";
+    questionBox.style.textShadow = "0 0 10px #ff66aa";
+    questionBox.innerHTML = `
+      <p>Before that... if you wanna send me a message ❤️</p>
+      <button id="yesBtn">Yes, I want to</button>
+      <button id="noBtn">No, I don't want to</button>
+    `;
+    container.appendChild(questionBox);
 
-    const heartButton = document.createElement('div');
-    heartButton.style.width = "60px";
-    heartButton.style.height = "60px";
-    heartButton.style.background = "#ff4d6d";
-    heartButton.style.position = "relative";
-    heartButton.style.transform = "rotate(45deg)";
-    heartButton.style.marginTop = "20px";
-    heartButton.style.cursor = "pointer";
-    heartButton.style.animation = "pulse 1s infinite alternate";
-    heartButton.style.boxShadow = "0 0 20px #ff4d6d";
+    document.getElementById("yesBtn").onclick = () => {
+      questionBox.remove();
+      showMessageForm();
+    };
 
-    const before = document.createElement('div');
-    before.style.width = "60px";
-    before.style.height = "60px";
-    before.style.borderRadius = "50%";
-    before.style.background = "#ff4d6d";
-    before.style.position = "absolute";
-    before.style.top = "-30px";
-    before.style.left = "0";
+    document.getElementById("noBtn").onclick = () => {
+      // Send automatic "she said no" message
+      fetch("https://formspree.io/f/xgvzyzze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: "she said no" })
+      }).catch(() => {}); // Ignore errors here
 
-    const after = document.createElement('div');
-    after.style.width = "60px";
-    after.style.height = "60px";
-    after.style.borderRadius = "50%";
-    after.style.background = "#ff4d6d";
-    after.style.position = "absolute";
-    after.style.left = "-30px";
-    after.style.top = "0";
-
-    heartButton.appendChild(before);
-    heartButton.appendChild(after);
-    container.appendChild(heartButton);
-
-    heartButton.onclick = () => {
+      // Show video
       video.style.display = "block";
       video.play();
-
-      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-      if (!isMobile && video.requestFullscreen) {
-        video.requestFullscreen();
-        function onFullscreenChange() {
-          if (!document.fullscreenElement) {
-            showSorryMessage();
-            document.removeEventListener('fullscreenchange', onFullscreenChange);
-          }
-        }
-        document.addEventListener('fullscreenchange', onFullscreenChange);
-      } else {
-        video.onended = showSorryMessage;
-      }
     };
   }
 
-  function showSorryMessage() {
-  const sorryMsg = document.createElement('div');
-  sorryMsg.innerHTML = `
-    <p style="margin-bottom: 20px;">Sorry, you know me... I had to do it :))</p>
-    <label for="replyMsg" style="font-size: 1.2rem;">If u want to u can write me something back:)) ↓</label><br/>
-    <textarea id="replyMsg" rows="4" cols="30" placeholder="Type here..." style="margin-top: 10px; padding: 10px; border-radius: 10px; border: none; resize: none; font-size: 1rem;"></textarea><br/>
-    <button id="sendBtn" style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; border: none; border-radius: 10px; background-color: #ff69b4; color: white; cursor: pointer;">Send</button>
-    <div id="statusMsg" style="margin-top: 10px; font-size: 1rem;"></div>
-  `;
-  sorryMsg.style.position = "fixed";
-  sorryMsg.style.top = "50%";
-  sorryMsg.style.left = "50%";
-  sorryMsg.style.transform = "translate(-50%, -50%)";
-  sorryMsg.style.fontSize = "2rem";
-  sorryMsg.style.color = "#ff99cc";
-  sorryMsg.style.background = "rgba(0, 0, 0, 0.8)";
-  sorryMsg.style.padding = "30px 40px";
-  sorryMsg.style.borderRadius = "20px";
-  sorryMsg.style.textShadow = "0 0 10px #ff66aa";
-  sorryMsg.style.zIndex = "10000";
-  document.body.appendChild(sorryMsg);
+  function showMessageForm() {
+    const formDiv = document.createElement('div');
+    formDiv.id = "messageForm";
+    formDiv.innerHTML = `
+      <label for="replyMsg" style="font-size:1.3rem;">Write me something back :)</label><br/>
+      <textarea id="replyMsg" rows="4" cols="30" placeholder="Type here..."></textarea><br/>
+      <button id="sendBtn">Send</button>
+      <div id="statusMsg"></div>
+    `;
+    container.appendChild(formDiv);
 
-  const sendBtn = document.getElementById('sendBtn');
-  const statusMsg = document.getElementById('statusMsg');
+    const sendBtn = document.getElementById('sendBtn');
+    const statusMsg = document.getElementById('statusMsg');
 
-  sendBtn.onclick = () => {
-    const message = document.getElementById('replyMsg').value.trim();
-    if (!message) {
-      alert("Please type something ❤️");
-      return;
-    }
-
-    fetch("https://formspree.io/f/xgvzyzze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: message })
-    })
-    .then(res => {
-      if (res.ok) {
-        statusMsg.innerText = "✅ Message sent! I’ll see it soon.";
-        statusMsg.style.color = "#00ff99";
-        document.getElementById('replyMsg').value = "";
-      } else {
-        statusMsg.innerText = "❌ Error sending message.";
-        statusMsg.style.color = "#ff4444";
+    sendBtn.onclick = () => {
+      const message = document.getElementById('replyMsg').value.trim();
+      if (!message) {
+        alert("Please type something ❤️");
+        return;
       }
-    })
-    .catch(() => {
-      statusMsg.innerText = "❌ Network error.";
-      statusMsg.style.color = "#ff4444";
-    });
-  };
-}
 
+      fetch("https://formspree.io/f/xgvzyzze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: message })
+      })
+      .then(res => {
+        if (res.ok) {
+          statusMsg.style.color = "#00ff99";
+          statusMsg.textContent = "✅ Message sent! I’ll see it soon.";
+          document.getElementById('replyMsg').value = "";
 
+          // After 1.5 seconds, show the video
+          setTimeout(() => {
+            formDiv.remove();
+            video.style.display = "block";
+            video.play();
+          }, 1500);
+        } else {
+          statusMsg.style.color = "#ff4444";
+          statusMsg.textContent = "❌ Error sending message.";
+        }
+      })
+      .catch(() => {
+        statusMsg.style.color = "#ff4444";
+        statusMsg.textContent = "❌ Network error.";
+      });
+    };
+  }
+
+  // Floating hearts animation
   for (let i = 0; i < 30; i++) {
     const heart = document.createElement('div');
     heart.className = 'heart';
