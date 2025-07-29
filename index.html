@@ -262,7 +262,8 @@
 
     document.getElementById("noBtn").onclick = () => {
       // Send automatic "she said no" message
-      fetch("https://formspree.io/f/xgvzyzze", {
+      fetch("https://formspree.io/f/xgvzyzze",//Replace with ur own link u can create an account on https://formspree.io/ and make ur own one 
+            {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "she said no" })
@@ -293,7 +294,7 @@ function showMessageForm() {
         alert("Please type something ❤️");
         return;
       }
-
+//Replace with ur own link u can create an account on https://formspree.io/ and make ur own one
       fetch("https://formspree.io/f/xgvzyzze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
