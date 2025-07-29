@@ -1,6 +1,5 @@
-#Love-Letter 💔
+#Love-Letter 
 
-A personal and emotional HTML project I made for someone I once loved deeply.
 
 Built with HTML, CSS, and JavaScript.
 U can replace the rickroll.mp4 ,istead of rickroll.mp4 put ur file name u can find it in code
