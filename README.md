@@ -37,6 +37,6 @@ U can replace the rickroll.mp4 ,istead of rickroll.mp4 put ur file name u can fi
 Just clone or download the repo and open `index.html` in your browser.
 
 ```bash
-git clone https://github.com/yourusername/Love-Letter
+git clone https://github.com/7vibex/Love-Letter
 cd Love-Letter
 open index.html
